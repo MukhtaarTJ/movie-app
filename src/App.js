@@ -1,44 +1,33 @@
-import { useEffect, useState } from "react";
-import "./App.css";
-import MovieList from "./components/MovieList";
-import "bootstrap/dist/css/bootstrap.min.css";
-import MovieListHeading from "./components/MovieListHeading";
-import SearchBox from "./components/SearchBox";
+import React from "react";
+import Movies from "./movies";
+import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
+import Home from "./components/Home";
 
-function App() {
-  const [movies, setMovies] = useState([]);
-  const [searchValue, setSearchValue] = useState("");
-  const getMovieRequest = async () => {
-    const url = `http://www.omdbapi.com/?s=${searchValue}&apikey=4dc1bb11`;
-    const response = await fetch(url);
-    const responseJson = await response.json();
-    if (responseJson.Search) {
-      setMovies(responseJson.Search);
-    }
-  };
-  useEffect(
-    (searchValue) => {
-      getMovieRequest(searchValue);
-    },
-    [searchValue]
-  );
-
+const App = () => {
   return (
-    <div className="App d-flex ">
-      <div className="container-fluid d-flex row movie-app  ">
-        <div className="d-flex gap-5 header col">
-          <MovieListHeading heading="movies" className="text-light" />
-          <SearchBox
-            searchValue={searchValue}
-            setSearchValue={setSearchValue}
-          />
-        </div>
-        <div className="d-flex">
-          <MovieList movies={movies} className="d-flex" />
-        </div>
+    <Router>
+      <div className="links">
+        <Link
+          to="/"
+          className="link"
+          style={{ color: "white", fontSize: "25px", marginLeft: "120px" }}>
+          Home
+        </Link>
+
+        <Link
+          to="/movies"
+          className="link"
+          style={{ color: "white", fontSize: "25px", marginLeft: "auto" }}>
+          My movies
+        </Link>
       </div>
-    </div>
+      <Routes>
+        <Route path="/" element={<Home />} />
+
+        <Route path="/movies" element={<Movies />} />
+      </Routes>
+    </Router>
   );
-}
+};
 
 export default App;
